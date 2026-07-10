@@ -1,0 +1,1552 @@
+{
+  "config": {
+    "tipo_cambio": 3.75,
+    "aporte_inicial": 35000,
+    "deuda_carro_total": 45000,
+    "distribucion": {
+      "carro": 0.6,
+      "reinversion": 0.25,
+      "ahorro": 0.1,
+      "gastos": 0.05
+    }
+  },
+  "clientes": [
+    {
+      "id": "C001",
+      "nombre": "Alexis",
+      "dni": null,
+      "celular": "912345678",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C002",
+      "nombre": "Richard",
+      "dni": null,
+      "celular": "913580245",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 1,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C003",
+      "nombre": "Raquel",
+      "dni": null,
+      "celular": "914814812",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 1,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C004",
+      "nombre": "Giosepi",
+      "dni": null,
+      "celular": "916049379",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C005",
+      "nombre": "Javier",
+      "dni": null,
+      "celular": "917283946",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C006",
+      "nombre": "Amiga Andrea",
+      "dni": null,
+      "celular": "918518513",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C007",
+      "nombre": "Juan",
+      "dni": null,
+      "celular": "919753080",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C008",
+      "nombre": "Hermano Javier",
+      "dni": null,
+      "celular": "920987647",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C009",
+      "nombre": "Andrea",
+      "dni": null,
+      "celular": "922222214",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C010",
+      "nombre": "SeñOr Juan",
+      "dni": null,
+      "celular": "923456781",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 3,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C011",
+      "nombre": "Kath",
+      "dni": null,
+      "celular": "924691348",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C012",
+      "nombre": "SeñOra Papa",
+      "dni": null,
+      "celular": "925925915",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 3,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C013",
+      "nombre": "Enger",
+      "dni": null,
+      "celular": "927160482",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C014",
+      "nombre": "Johana",
+      "dni": null,
+      "celular": "928395049",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 3,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C015",
+      "nombre": "Jorly",
+      "dni": null,
+      "celular": "929629616",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C016",
+      "nombre": "Hermana Andrea",
+      "dni": null,
+      "celular": "930864183",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C017",
+      "nombre": "Hermano Javier 2",
+      "dni": null,
+      "celular": "932098750",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    },
+    {
+      "id": "C018",
+      "nombre": "Jean Pablo",
+      "dni": null,
+      "celular": "933333317",
+      "direccion": null,
+      "trabajo": null,
+      "empresa": null,
+      "referido_por": null,
+      "score": 4,
+      "observaciones": "Importado de Control_Prestamos.xlsx"
+    }
+  ],
+  "prestamos": [
+    {
+      "id": "P001",
+      "cliente_id": "C001",
+      "capital": 1330,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 266,
+      "dia_pago": 1,
+      "fecha_inicio": "2025-12-01",
+      "estado": "activo",
+      "capital_pendiente": 1330
+    },
+    {
+      "id": "P002",
+      "cliente_id": "C002",
+      "capital": 500,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 100,
+      "dia_pago": 2,
+      "fecha_inicio": "2025-11-02",
+      "estado": "moroso",
+      "capital_pendiente": 500
+    },
+    {
+      "id": "P003",
+      "cliente_id": "C003",
+      "capital": 1000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 200,
+      "dia_pago": 8,
+      "fecha_inicio": "2025-11-08",
+      "estado": "moroso",
+      "capital_pendiente": 1000
+    },
+    {
+      "id": "P004",
+      "cliente_id": "C004",
+      "capital": 100,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 20,
+      "dia_pago": 9,
+      "fecha_inicio": "2025-12-09",
+      "estado": "activo",
+      "capital_pendiente": 100
+    },
+    {
+      "id": "P005",
+      "cliente_id": "C005",
+      "capital": 600,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 120,
+      "dia_pago": 9,
+      "fecha_inicio": "2025-11-09",
+      "estado": "activo",
+      "capital_pendiente": 600
+    },
+    {
+      "id": "P006",
+      "cliente_id": "C001",
+      "capital": 2000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 400,
+      "dia_pago": 10,
+      "fecha_inicio": "2026-03-10",
+      "estado": "activo",
+      "capital_pendiente": 2000
+    },
+    {
+      "id": "P007",
+      "cliente_id": "C005",
+      "capital": 300,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 60,
+      "dia_pago": 13,
+      "fecha_inicio": "2026-06-13",
+      "estado": "activo",
+      "capital_pendiente": 300
+    },
+    {
+      "id": "P008",
+      "cliente_id": "C006",
+      "capital": 1000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 200,
+      "dia_pago": 14,
+      "fecha_inicio": "2025-12-14",
+      "estado": "activo",
+      "capital_pendiente": 1000
+    },
+    {
+      "id": "P009",
+      "cliente_id": "C007",
+      "capital": 2900,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 580,
+      "dia_pago": 15,
+      "fecha_inicio": "2026-03-15",
+      "estado": "activo",
+      "capital_pendiente": 2900
+    },
+    {
+      "id": "P010",
+      "cliente_id": "C008",
+      "capital": 100,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 20,
+      "dia_pago": 15,
+      "fecha_inicio": "2026-05-15",
+      "estado": "activo",
+      "capital_pendiente": 100
+    },
+    {
+      "id": "P011",
+      "cliente_id": "C009",
+      "capital": 2000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 200,
+      "dia_pago": 15,
+      "fecha_inicio": "2026-02-15",
+      "estado": "activo",
+      "capital_pendiente": 2000
+    },
+    {
+      "id": "P012",
+      "cliente_id": "C010",
+      "capital": 1000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 200,
+      "dia_pago": 15,
+      "fecha_inicio": "2026-06-15",
+      "estado": "activo",
+      "capital_pendiente": 1000
+    },
+    {
+      "id": "P013",
+      "cliente_id": "C001",
+      "capital": 800,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 160,
+      "dia_pago": 16,
+      "fecha_inicio": "2026-02-16",
+      "estado": "activo",
+      "capital_pendiente": 800
+    },
+    {
+      "id": "P014",
+      "cliente_id": "C011",
+      "capital": 150,
+      "moneda": "USD",
+      "tasa_interes": 20,
+      "interes_mensual": 30,
+      "dia_pago": 16,
+      "fecha_inicio": "2026-02-16",
+      "estado": "activo",
+      "capital_pendiente": 150
+    },
+    {
+      "id": "P015",
+      "cliente_id": "C012",
+      "capital": 1000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 200,
+      "dia_pago": 17,
+      "fecha_inicio": "2026-06-17",
+      "estado": "activo",
+      "capital_pendiente": 1000
+    },
+    {
+      "id": "P016",
+      "cliente_id": "C013",
+      "capital": 360,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 72,
+      "dia_pago": 24,
+      "fecha_inicio": "2025-11-24",
+      "estado": "activo",
+      "capital_pendiente": 360
+    },
+    {
+      "id": "P017",
+      "cliente_id": "C014",
+      "capital": 323,
+      "moneda": "USD",
+      "tasa_interes": 20,
+      "interes_mensual": 64.6,
+      "dia_pago": 28,
+      "fecha_inicio": "2025-12-28",
+      "estado": "activo",
+      "capital_pendiente": 323
+    },
+    {
+      "id": "P018",
+      "cliente_id": "C015",
+      "capital": 1500,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 300,
+      "dia_pago": 28,
+      "fecha_inicio": "2025-11-28",
+      "estado": "activo",
+      "capital_pendiente": 1500
+    },
+    {
+      "id": "P019",
+      "cliente_id": "C016",
+      "capital": 1000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 200,
+      "dia_pago": 28,
+      "fecha_inicio": "2025-12-28",
+      "estado": "activo",
+      "capital_pendiente": 1000
+    },
+    {
+      "id": "P020",
+      "cliente_id": "C016",
+      "capital": 1000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 200,
+      "dia_pago": 28,
+      "fecha_inicio": "2026-02-28",
+      "estado": "activo",
+      "capital_pendiente": 1000
+    },
+    {
+      "id": "P021",
+      "cliente_id": "C008",
+      "capital": 1000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 200,
+      "dia_pago": 28,
+      "fecha_inicio": "2025-11-28",
+      "estado": "activo",
+      "capital_pendiente": 1000
+    },
+    {
+      "id": "P022",
+      "cliente_id": "C017",
+      "capital": 1000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 200,
+      "dia_pago": 28,
+      "fecha_inicio": "2025-11-28",
+      "estado": "activo",
+      "capital_pendiente": 1000
+    },
+    {
+      "id": "P023",
+      "cliente_id": "C018",
+      "capital": 3000,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 600,
+      "dia_pago": 28,
+      "fecha_inicio": "2026-04-28",
+      "estado": "activo",
+      "capital_pendiente": 3000
+    },
+    {
+      "id": "P024",
+      "cliente_id": "C007",
+      "capital": 2600,
+      "moneda": "PEN",
+      "tasa_interes": 20,
+      "interes_mensual": 520,
+      "dia_pago": 28,
+      "fecha_inicio": "2026-03-28",
+      "estado": "activo",
+      "capital_pendiente": 2600
+    },
+    {
+      "id": "P025",
+      "cliente_id": "C007",
+      "capital": 150,
+      "moneda": "USD",
+      "tasa_interes": 20,
+      "interes_mensual": 30,
+      "dia_pago": 28,
+      "fecha_inicio": "2026-03-28",
+      "estado": "activo",
+      "capital_pendiente": 150
+    }
+  ],
+  "pagos": [
+    {
+      "id": "PG0001",
+      "prestamo_id": "P001",
+      "cliente_id": "C001",
+      "fecha": "2025-12-01",
+      "monto": 266,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0002",
+      "prestamo_id": "P001",
+      "cliente_id": "C001",
+      "fecha": "2026-01-01",
+      "monto": 266,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0003",
+      "prestamo_id": "P001",
+      "cliente_id": "C001",
+      "fecha": "2026-02-01",
+      "monto": 266,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0004",
+      "prestamo_id": "P001",
+      "cliente_id": "C001",
+      "fecha": "2026-03-01",
+      "monto": 266,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0005",
+      "prestamo_id": "P001",
+      "cliente_id": "C001",
+      "fecha": "2026-04-01",
+      "monto": 266,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0006",
+      "prestamo_id": "P001",
+      "cliente_id": "C001",
+      "fecha": "2026-05-01",
+      "monto": 266,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0007",
+      "prestamo_id": "P001",
+      "cliente_id": "C001",
+      "fecha": "2026-06-01",
+      "monto": 266,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0008",
+      "prestamo_id": "P004",
+      "cliente_id": "C004",
+      "fecha": "2025-12-09",
+      "monto": 20,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0009",
+      "prestamo_id": "P004",
+      "cliente_id": "C004",
+      "fecha": "2026-01-09",
+      "monto": 20,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0010",
+      "prestamo_id": "P004",
+      "cliente_id": "C004",
+      "fecha": "2026-02-09",
+      "monto": 20,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0011",
+      "prestamo_id": "P004",
+      "cliente_id": "C004",
+      "fecha": "2026-03-09",
+      "monto": 20,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0012",
+      "prestamo_id": "P004",
+      "cliente_id": "C004",
+      "fecha": "2026-04-09",
+      "monto": 20,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0013",
+      "prestamo_id": "P004",
+      "cliente_id": "C004",
+      "fecha": "2026-05-09",
+      "monto": 20,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0014",
+      "prestamo_id": "P004",
+      "cliente_id": "C004",
+      "fecha": "2026-06-09",
+      "monto": 20,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0015",
+      "prestamo_id": "P005",
+      "cliente_id": "C005",
+      "fecha": "2025-11-09",
+      "monto": 120,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0016",
+      "prestamo_id": "P005",
+      "cliente_id": "C005",
+      "fecha": "2025-12-09",
+      "monto": 120,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0017",
+      "prestamo_id": "P005",
+      "cliente_id": "C005",
+      "fecha": "2026-01-09",
+      "monto": 120,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0018",
+      "prestamo_id": "P005",
+      "cliente_id": "C005",
+      "fecha": "2026-02-09",
+      "monto": 120,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0019",
+      "prestamo_id": "P005",
+      "cliente_id": "C005",
+      "fecha": "2026-03-09",
+      "monto": 120,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0020",
+      "prestamo_id": "P005",
+      "cliente_id": "C005",
+      "fecha": "2026-04-09",
+      "monto": 120,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0021",
+      "prestamo_id": "P005",
+      "cliente_id": "C005",
+      "fecha": "2026-05-09",
+      "monto": 120,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0022",
+      "prestamo_id": "P005",
+      "cliente_id": "C005",
+      "fecha": "2026-06-09",
+      "monto": 120,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0023",
+      "prestamo_id": "P006",
+      "cliente_id": "C001",
+      "fecha": "2026-03-10",
+      "monto": 400,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0024",
+      "prestamo_id": "P006",
+      "cliente_id": "C001",
+      "fecha": "2026-04-10",
+      "monto": 400,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0025",
+      "prestamo_id": "P006",
+      "cliente_id": "C001",
+      "fecha": "2026-05-10",
+      "monto": 400,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0026",
+      "prestamo_id": "P006",
+      "cliente_id": "C001",
+      "fecha": "2026-06-10",
+      "monto": 400,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0027",
+      "prestamo_id": "P007",
+      "cliente_id": "C005",
+      "fecha": "2026-06-13",
+      "monto": 60,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0028",
+      "prestamo_id": "P008",
+      "cliente_id": "C006",
+      "fecha": "2025-12-14",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0029",
+      "prestamo_id": "P008",
+      "cliente_id": "C006",
+      "fecha": "2026-01-14",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0030",
+      "prestamo_id": "P008",
+      "cliente_id": "C006",
+      "fecha": "2026-02-14",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0031",
+      "prestamo_id": "P008",
+      "cliente_id": "C006",
+      "fecha": "2026-03-14",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0032",
+      "prestamo_id": "P008",
+      "cliente_id": "C006",
+      "fecha": "2026-04-14",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0033",
+      "prestamo_id": "P008",
+      "cliente_id": "C006",
+      "fecha": "2026-05-14",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0034",
+      "prestamo_id": "P008",
+      "cliente_id": "C006",
+      "fecha": "2026-06-14",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0035",
+      "prestamo_id": "P009",
+      "cliente_id": "C007",
+      "fecha": "2026-03-15",
+      "monto": 580,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0036",
+      "prestamo_id": "P009",
+      "cliente_id": "C007",
+      "fecha": "2026-04-15",
+      "monto": 580,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0037",
+      "prestamo_id": "P009",
+      "cliente_id": "C007",
+      "fecha": "2026-05-15",
+      "monto": 580,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0038",
+      "prestamo_id": "P009",
+      "cliente_id": "C007",
+      "fecha": "2026-06-15",
+      "monto": 580,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0039",
+      "prestamo_id": "P010",
+      "cliente_id": "C008",
+      "fecha": "2026-05-15",
+      "monto": 20,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0040",
+      "prestamo_id": "P010",
+      "cliente_id": "C008",
+      "fecha": "2026-06-15",
+      "monto": 20,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0041",
+      "prestamo_id": "P011",
+      "cliente_id": "C009",
+      "fecha": "2026-02-15",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0042",
+      "prestamo_id": "P011",
+      "cliente_id": "C009",
+      "fecha": "2026-03-15",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0043",
+      "prestamo_id": "P011",
+      "cliente_id": "C009",
+      "fecha": "2026-04-15",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0044",
+      "prestamo_id": "P011",
+      "cliente_id": "C009",
+      "fecha": "2026-05-15",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0045",
+      "prestamo_id": "P011",
+      "cliente_id": "C009",
+      "fecha": "2026-06-15",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0046",
+      "prestamo_id": "P012",
+      "cliente_id": "C010",
+      "fecha": "2026-06-15",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0047",
+      "prestamo_id": "P013",
+      "cliente_id": "C001",
+      "fecha": "2026-02-16",
+      "monto": 160,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0048",
+      "prestamo_id": "P013",
+      "cliente_id": "C001",
+      "fecha": "2026-03-16",
+      "monto": 160,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0049",
+      "prestamo_id": "P013",
+      "cliente_id": "C001",
+      "fecha": "2026-04-16",
+      "monto": 160,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0050",
+      "prestamo_id": "P013",
+      "cliente_id": "C001",
+      "fecha": "2026-05-16",
+      "monto": 160,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0051",
+      "prestamo_id": "P013",
+      "cliente_id": "C001",
+      "fecha": "2026-06-16",
+      "monto": 160,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0052",
+      "prestamo_id": "P014",
+      "cliente_id": "C011",
+      "fecha": "2026-02-16",
+      "monto": 30,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0053",
+      "prestamo_id": "P014",
+      "cliente_id": "C011",
+      "fecha": "2026-03-16",
+      "monto": 30,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0054",
+      "prestamo_id": "P014",
+      "cliente_id": "C011",
+      "fecha": "2026-04-16",
+      "monto": 30,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0055",
+      "prestamo_id": "P014",
+      "cliente_id": "C011",
+      "fecha": "2026-05-16",
+      "monto": 30,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0056",
+      "prestamo_id": "P014",
+      "cliente_id": "C011",
+      "fecha": "2026-06-16",
+      "monto": 30,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0057",
+      "prestamo_id": "P015",
+      "cliente_id": "C012",
+      "fecha": "2026-06-17",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0058",
+      "prestamo_id": "P016",
+      "cliente_id": "C013",
+      "fecha": "2025-11-24",
+      "monto": 72,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0059",
+      "prestamo_id": "P016",
+      "cliente_id": "C013",
+      "fecha": "2025-12-24",
+      "monto": 72,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0060",
+      "prestamo_id": "P016",
+      "cliente_id": "C013",
+      "fecha": "2026-01-24",
+      "monto": 72,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0061",
+      "prestamo_id": "P016",
+      "cliente_id": "C013",
+      "fecha": "2026-02-24",
+      "monto": 72,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0062",
+      "prestamo_id": "P016",
+      "cliente_id": "C013",
+      "fecha": "2026-04-24",
+      "monto": 72,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0063",
+      "prestamo_id": "P016",
+      "cliente_id": "C013",
+      "fecha": "2026-05-24",
+      "monto": 72,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0064",
+      "prestamo_id": "P016",
+      "cliente_id": "C013",
+      "fecha": "2026-06-24",
+      "monto": 72,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0065",
+      "prestamo_id": "P017",
+      "cliente_id": "C014",
+      "fecha": "2025-12-28",
+      "monto": 64.6,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0066",
+      "prestamo_id": "P017",
+      "cliente_id": "C014",
+      "fecha": "2026-01-28",
+      "monto": 64.6,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0067",
+      "prestamo_id": "P017",
+      "cliente_id": "C014",
+      "fecha": "2026-02-28",
+      "monto": 64.6,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0068",
+      "prestamo_id": "P017",
+      "cliente_id": "C014",
+      "fecha": "2026-03-28",
+      "monto": 64.6,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0069",
+      "prestamo_id": "P017",
+      "cliente_id": "C014",
+      "fecha": "2026-06-28",
+      "monto": 64.6,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0070",
+      "prestamo_id": "P018",
+      "cliente_id": "C015",
+      "fecha": "2025-11-28",
+      "monto": 300,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0071",
+      "prestamo_id": "P018",
+      "cliente_id": "C015",
+      "fecha": "2025-12-28",
+      "monto": 300,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0072",
+      "prestamo_id": "P018",
+      "cliente_id": "C015",
+      "fecha": "2026-01-28",
+      "monto": 300,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0073",
+      "prestamo_id": "P018",
+      "cliente_id": "C015",
+      "fecha": "2026-03-28",
+      "monto": 300,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0074",
+      "prestamo_id": "P018",
+      "cliente_id": "C015",
+      "fecha": "2026-04-28",
+      "monto": 300,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0075",
+      "prestamo_id": "P018",
+      "cliente_id": "C015",
+      "fecha": "2026-05-28",
+      "monto": 300,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0076",
+      "prestamo_id": "P018",
+      "cliente_id": "C015",
+      "fecha": "2026-06-28",
+      "monto": 300,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0077",
+      "prestamo_id": "P019",
+      "cliente_id": "C016",
+      "fecha": "2025-12-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0078",
+      "prestamo_id": "P019",
+      "cliente_id": "C016",
+      "fecha": "2026-01-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0079",
+      "prestamo_id": "P019",
+      "cliente_id": "C016",
+      "fecha": "2026-02-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0080",
+      "prestamo_id": "P019",
+      "cliente_id": "C016",
+      "fecha": "2026-03-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0081",
+      "prestamo_id": "P019",
+      "cliente_id": "C016",
+      "fecha": "2026-04-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0082",
+      "prestamo_id": "P019",
+      "cliente_id": "C016",
+      "fecha": "2026-05-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0083",
+      "prestamo_id": "P019",
+      "cliente_id": "C016",
+      "fecha": "2026-06-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0084",
+      "prestamo_id": "P020",
+      "cliente_id": "C016",
+      "fecha": "2026-02-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0085",
+      "prestamo_id": "P020",
+      "cliente_id": "C016",
+      "fecha": "2026-03-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0086",
+      "prestamo_id": "P020",
+      "cliente_id": "C016",
+      "fecha": "2026-04-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0087",
+      "prestamo_id": "P020",
+      "cliente_id": "C016",
+      "fecha": "2026-05-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0088",
+      "prestamo_id": "P020",
+      "cliente_id": "C016",
+      "fecha": "2026-06-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0089",
+      "prestamo_id": "P021",
+      "cliente_id": "C008",
+      "fecha": "2025-11-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0090",
+      "prestamo_id": "P021",
+      "cliente_id": "C008",
+      "fecha": "2025-12-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0091",
+      "prestamo_id": "P021",
+      "cliente_id": "C008",
+      "fecha": "2026-02-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0092",
+      "prestamo_id": "P021",
+      "cliente_id": "C008",
+      "fecha": "2026-03-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0093",
+      "prestamo_id": "P021",
+      "cliente_id": "C008",
+      "fecha": "2026-04-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0094",
+      "prestamo_id": "P021",
+      "cliente_id": "C008",
+      "fecha": "2026-05-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0095",
+      "prestamo_id": "P021",
+      "cliente_id": "C008",
+      "fecha": "2026-06-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0096",
+      "prestamo_id": "P022",
+      "cliente_id": "C017",
+      "fecha": "2025-11-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0097",
+      "prestamo_id": "P022",
+      "cliente_id": "C017",
+      "fecha": "2025-12-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0098",
+      "prestamo_id": "P022",
+      "cliente_id": "C017",
+      "fecha": "2026-02-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0099",
+      "prestamo_id": "P022",
+      "cliente_id": "C017",
+      "fecha": "2026-03-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0100",
+      "prestamo_id": "P022",
+      "cliente_id": "C017",
+      "fecha": "2026-04-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0101",
+      "prestamo_id": "P022",
+      "cliente_id": "C017",
+      "fecha": "2026-05-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0102",
+      "prestamo_id": "P022",
+      "cliente_id": "C017",
+      "fecha": "2026-06-28",
+      "monto": 200,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0103",
+      "prestamo_id": "P023",
+      "cliente_id": "C018",
+      "fecha": "2026-04-28",
+      "monto": 600,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0104",
+      "prestamo_id": "P023",
+      "cliente_id": "C018",
+      "fecha": "2026-05-28",
+      "monto": 600,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0105",
+      "prestamo_id": "P023",
+      "cliente_id": "C018",
+      "fecha": "2026-06-28",
+      "monto": 600,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0106",
+      "prestamo_id": "P024",
+      "cliente_id": "C007",
+      "fecha": "2026-03-28",
+      "monto": 520,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0107",
+      "prestamo_id": "P024",
+      "cliente_id": "C007",
+      "fecha": "2026-04-28",
+      "monto": 520,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0108",
+      "prestamo_id": "P024",
+      "cliente_id": "C007",
+      "fecha": "2026-05-28",
+      "monto": 520,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0109",
+      "prestamo_id": "P024",
+      "cliente_id": "C007",
+      "fecha": "2026-06-28",
+      "monto": 520,
+      "moneda": "PEN",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0110",
+      "prestamo_id": "P025",
+      "cliente_id": "C007",
+      "fecha": "2026-03-28",
+      "monto": 30,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0111",
+      "prestamo_id": "P025",
+      "cliente_id": "C007",
+      "fecha": "2026-04-28",
+      "monto": 30,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0112",
+      "prestamo_id": "P025",
+      "cliente_id": "C007",
+      "fecha": "2026-05-28",
+      "monto": 30,
+      "moneda": "USD",
+      "tipo": "interes"
+    },
+    {
+      "id": "PG0113",
+      "prestamo_id": "P025",
+      "cliente_id": "C007",
+      "fecha": "2026-06-28",
+      "monto": 30,
+      "moneda": "USD",
+      "tipo": "interes"
+    }
+  ]
+}
