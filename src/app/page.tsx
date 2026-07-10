@@ -258,7 +258,9 @@ export default async function DashboardPage() {
       </section>
 
       <footer className="mt-8 text-center text-xs text-muted-foreground">
-        MVP · Datos de ejemplo cargados desde Control_Prestamos.xlsx · Conecta Supabase para producción
+        {HAS_SUPABASE
+          ? "MVP · Datos en vivo desde Supabase · Financiera privada"
+          : "MVP · Datos de ejemplo desde Control_Prestamos.xlsx · Conecta Supabase para producción"}
       </footer>
     </div>
   );
