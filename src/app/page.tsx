@@ -4,12 +4,9 @@ import { CalendarioCobros } from "@/components/dashboard/calendario-cobros";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import {
-  calendarioCobros,
-  dashboardResumen,
-  monthlyStats,
-  UMBRAL_LIQUIDEZ,
-} from "@/lib/finance";
+import { buildFinance, UMBRAL_LIQUIDEZ } from "@/lib/finance";
+import { getDataset, HAS_SUPABASE } from "@/lib/data";
+import { LogoutButton } from "@/components/dashboard/logout-button";
 import { formatFechaLarga, formatPct, formatPEN } from "@/lib/format";
 import {
   AlertTriangle,
@@ -27,10 +24,14 @@ import {
   Wallet,
 } from "lucide-react";
 
-export default function DashboardPage() {
-  const r = dashboardResumen();
-  const stats = monthlyStats(12);
-  const cobros = calendarioCobros();
+export const dynamic = "force-dynamic";
+
+export default async function DashboardPage() {
+  const dataset = await getDataset();
+  const fin = buildFinance(dataset);
+  const r = fin.dashboardResumen();
+  const stats = fin.monthlyStats(12);
+  const cobros = fin.calendarioCobros();
   const mom = r.comparativaMoM;
   const liquidezBaja = r.liquidez < UMBRAL_LIQUIDEZ;
 
@@ -52,9 +53,18 @@ export default function DashboardPage() {
             Financiera privada · {formatFechaLarga(r.hoy)}
           </p>
         </div>
-        <Badge variant="outline" className="w-fit border-amber-500/30 bg-amber-500/10 text-amber-500">
-          Datos de ejemplo (mock)
-        </Badge>
+        <div className="flex items-center gap-2">
+          {HAS_SUPABASE ? (
+            <Badge variant="outline" className="w-fit border-emerald-500/30 bg-emerald-500/10 text-emerald-500">
+              Datos reales · Supabase
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="w-fit border-amber-500/30 bg-amber-500/10 text-amber-500">
+              Datos de ejemplo (mock)
+            </Badge>
+          )}
+          {HAS_SUPABASE && <LogoutButton />}
+        </div>
       </header>
 
       {/* Alerta de liquidez */}
