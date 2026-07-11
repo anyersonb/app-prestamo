@@ -5,10 +5,10 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
+  LabelList,
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
 } from "recharts";
 import type { MonthlyStat } from "@/lib/types";
 
@@ -21,6 +21,9 @@ interface TooltipProps {
   payload?: Array<{ payload: MonthlyStat }>;
 }
 
+const money = (v: number) =>
+  v >= 1000 ? `S/${(v / 1000).toFixed(1)}k` : `S/${Math.round(v)}`;
+
 function TooltipContenido({ active, payload }: TooltipProps) {
   if (!active || !payload?.length) return null;
   const d: MonthlyStat = payload[0].payload;
@@ -28,24 +31,23 @@ function TooltipContenido({ active, payload }: TooltipProps) {
     <div className="rounded-lg border bg-popover px-3 py-2 text-xs shadow-md">
       <p className="font-semibold text-popover-foreground">{d.label}</p>
       <p className="mt-1 text-muted-foreground">
-        Rentabilidad: <span className="font-medium text-emerald-500">{d.rentabilidad.toFixed(1)}%</span>
+        Cobrado:{" "}
+        <span className="font-medium text-emerald-500">
+          S/ {d.interesesCobrados.toLocaleString("es-PE")}
+        </span>
       </p>
       <p className="text-muted-foreground">
-        Anualizada: <span className="font-medium">{d.rentabilidadAnualizada.toFixed(0)}%</span>
+        Rentabilidad: {d.rentabilidad.toFixed(1)}%
       </p>
-      <p className="text-muted-foreground">
-        Intereses: S/ {d.interesesCobrados.toLocaleString("es-PE")}
-      </p>
-      <p className="text-muted-foreground">Mora: {d.mora.toFixed(0)}%</p>
     </div>
   );
 }
 
 export function RentabilidadChart({ data }: Props) {
-  const max = Math.max(...data.map((d) => d.rentabilidad), 1);
+  const max = Math.max(...data.map((d) => d.interesesCobrados), 1);
   return (
     <ResponsiveContainer width="100%" height={260}>
-      <BarChart data={data} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
+      <BarChart data={data} margin={{ top: 24, right: 8, left: 4, bottom: 0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
         <XAxis
           dataKey="label"
@@ -53,19 +55,22 @@ export function RentabilidadChart({ data }: Props) {
           tickLine={false}
           axisLine={false}
         />
-        <YAxis
-          tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
-          tickLine={false}
-          axisLine={false}
-          tickFormatter={(v) => `${v}%`}
-          width={40}
-        />
         <Tooltip content={<TooltipContenido />} cursor={{ fill: "hsl(var(--muted))", opacity: 0.3 }} />
-        <Bar dataKey="rentabilidad" radius={[4, 4, 0, 0]} maxBarSize={48} isAnimationActive={false}>
+        <Bar dataKey="interesesCobrados" radius={[4, 4, 0, 0]} maxBarSize={44} isAnimationActive={false}>
+          <LabelList
+            dataKey="interesesCobrados"
+            position="top"
+            fontSize={10}
+            fill="hsl(var(--muted-foreground))"
+            formatter={(v) => {
+              const n = Number(v);
+              return n > 0 ? money(n) : "";
+            }}
+          />
           {data.map((d, i) => (
             <Cell
               key={i}
-              fill={d.rentabilidad >= max * 0.99 ? "#10b981" : "#34d399"}
+              fill={d.interesesCobrados >= max * 0.99 ? "#10b981" : "#34d399"}
               fillOpacity={d.interesesCobrados > 0 ? 1 : 0.25}
             />
           ))}

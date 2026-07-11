@@ -10,6 +10,8 @@ import { LogoutButton } from "@/components/dashboard/logout-button";
 import { AccionesHeader } from "@/components/dashboard/acciones-header";
 import { AppNav } from "@/components/dashboard/app-nav";
 import { formatFechaLarga, formatPct, formatPEN } from "@/lib/format";
+import { DetallesFinancieros } from "@/components/dashboard/detalles-financieros";
+import { cn } from "@/lib/utils";
 import {
   AlertTriangle,
   ArrowDownRight,
@@ -20,8 +22,6 @@ import {
   Coins,
   HandCoins,
   Landmark,
-  PiggyBank,
-  TrendingUp,
   Users,
   Wallet,
 } from "lucide-react";
@@ -42,6 +42,52 @@ export default async function DashboardPage() {
 
   const pendientesCount = cobros.filter((c) => !c.pagado).length;
   const vencidosCount = cobros.filter((c) => !c.pagado && c.estado === "vencido").length;
+
+  // ---- Resumen humano del mes (solo presentación, sin cálculos nuevos) ----
+  const mesActual = stats[stats.length - 1];
+  const mesAnterior = stats[stats.length - 2];
+  const cobradoEsteMes = mesActual?.interesesCobrados ?? 0;
+  const cobradoMesPasado = mesAnterior?.interesesCobrados ?? 0;
+  const prev3 = stats.slice(-4, -1); // 3 meses previos al actual
+  const prom3 = prev3.length
+    ? prev3.reduce((s, m) => s + m.interesesCobrados, 0) / prev3.length
+    : 0;
+  const vencidoMonto = cobros
+    .filter((c) => !c.pagado && c.estado === "vencido")
+    .reduce((s, c) => s + c.monto, 0);
+  const porCobrar = r.interesesPendientes;
+  const esperadoMes = r.interesesMesActual + r.interesesPendientes;
+  const vencidoAlto = esperadoMes > 0 && vencidoMonto / esperadoMes > 0.2;
+
+  let semaforo = "🟡";
+  let tonoResumen: "success" | "warning" | "danger" = "warning";
+  if (vencidoAlto) {
+    semaforo = "🔴";
+    tonoResumen = "danger";
+  } else if (prom3 > 0 && cobradoEsteMes >= prom3) {
+    semaforo = "🟢";
+    tonoResumen = "success";
+  }
+
+  let comparacion: string;
+  if (cobradoMesPasado === 0) {
+    comparacion = "Vas arrancando el mes";
+  } else if (cobradoEsteMes > cobradoMesPasado) {
+    comparacion = `Vas mejor que el mes pasado (${formatPEN(cobradoEsteMes)} vs ${formatPEN(cobradoMesPasado)})`;
+  } else if (cobradoEsteMes < cobradoMesPasado) {
+    comparacion = `Cobraste menos que el mes pasado (${formatPEN(cobradoEsteMes)} vs ${formatPEN(cobradoMesPasado)})`;
+  } else {
+    comparacion = "Vas igual que el mes pasado";
+  }
+  const fraseVencido =
+    vencidoMonto > 0 ? `, de los cuales ${formatPEN(vencidoMonto)} ya están vencidos` : "";
+  const fraseResumen = `Cobraste ${formatPEN(cobradoEsteMes)} en intereses este mes. ${comparacion}. Te faltan ${formatPEN(porCobrar)} por cobrar${fraseVencido}.`;
+
+  const RESUMEN_STYLE: Record<string, string> = {
+    success: "border-emerald-500/30 bg-emerald-500/10",
+    warning: "border-amber-500/30 bg-amber-500/10",
+    danger: "border-red-500/30 bg-red-500/10",
+  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -83,6 +129,19 @@ export default async function DashboardPage() {
         </div>
       </header>
 
+      {/* Resumen del mes en lenguaje humano */}
+      <div
+        className={cn(
+          "mt-5 flex items-start gap-3 rounded-xl border p-4 sm:p-5",
+          RESUMEN_STYLE[tonoResumen],
+        )}
+      >
+        <span className="text-2xl leading-none" aria-hidden="true">{semaforo}</span>
+        <p className="text-sm leading-relaxed text-foreground sm:text-[15px]">
+          {fraseResumen}
+        </p>
+      </div>
+
       {/* Alerta de liquidez */}
       {liquidezBaja && (
         <div className="mt-4 flex items-start gap-3 rounded-lg border border-red-500/30 bg-red-500/10 p-4">
@@ -115,10 +174,17 @@ export default async function DashboardPage() {
         />
         <KpiCard
           titulo="Intereses cobrados"
-          valor={formatPEN(r.interesesRef)}
-          sub={`${r.mesRefLabel} · Acum. ${formatPEN(r.interesesAcum)}`}
+          valor={formatPEN(cobradoEsteMes)}
+          sub={`Este mes · Acumulado ${formatPEN(r.interesesAcum)}`}
           icon={Coins}
           tono="success"
+          trend={{
+            valor:
+              cobradoEsteMes >= cobradoMesPasado
+                ? `más que el mes pasado · ${formatPEN(cobradoEsteMes)} vs ${formatPEN(cobradoMesPasado)}`
+                : `menos que el mes pasado · ${formatPEN(cobradoEsteMes)} vs ${formatPEN(cobradoMesPasado)}`,
+            positivo: cobradoEsteMes >= cobradoMesPasado,
+          }}
         />
         <KpiCard
           titulo="Por cobrar este mes"
@@ -129,50 +195,32 @@ export default async function DashboardPage() {
         />
       </section>
 
-      {/* Fila 2 — Rendimiento */}
-      <section className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard
-          titulo="Rentabilidad del mes"
-          valor={formatPct(r.rentabilidadMes)}
-          sub={`${mom.mesLabel} (último mes con cobros)`}
-          icon={TrendingUp}
-          tono="success"
-          trend={{
-            valor: `${mom.subio ? "+" : ""}${mom.delta.toFixed(1)} pts vs. mes anterior`,
-            positivo: mom.subio,
-          }}
-        />
+      {/* Fila 2 — Liquidez (en palabras) + detalles financieros colapsables */}
+      <section className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-4">
         <KpiCard
           titulo="Liquidez"
           valor={formatPct(r.liquidez)}
-          sub="Caja vs. capital total"
+          sub={`De cada S/100 invertidos, S/${Math.round(r.liquidez)} están libres para prestar hoy`}
           icon={liquidezBaja ? ArrowDownRight : ArrowUpRight}
           tono={liquidezBaja ? "danger" : "info"}
         />
-        <KpiCard
-          titulo="Patrimonio neto"
-          valor={formatPEN(r.patrimonioNeto)}
-          sub="Caja + cartera + ahorro − deuda carro"
-          icon={PiggyBank}
-          tono="success"
-        />
-        <KpiCard
-          titulo="ROI acumulado"
-          valor={formatPct(r.roi)}
-          sub={`Interés promedio cartera: ${formatPct(r.interesPromedio, 0)}`}
-          icon={TrendingUp}
-          tono="success"
-        />
+        <div className="lg:col-span-3">
+          <DetallesFinancieros
+            rentabilidadMes={r.rentabilidadMes}
+            mesLabel={mom.mesLabel}
+            roi={r.roi}
+            patrimonio={r.patrimonioNeto}
+            interesPromedio={r.interesPromedio}
+          />
+        </div>
       </section>
 
       {/* Fila 3 — Gráfico + Calendario */}
       <section className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Card className="lg:col-span-3">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base">Rentabilidad mensual (últimos 12 meses)</CardTitle>
-            <Badge variant="outline" className="text-xs">
-              {mom.subio ? "▲" : "▼"} {formatPct(Math.abs(mom.delta))} MoM
-            </Badge>
+          <CardHeader>
+            <CardTitle className="text-base">Cuánto has cobrado cada mes</CardTitle>
+            <p className="text-xs text-muted-foreground">Intereses cobrados por mes (S/), últimos 12 meses</p>
           </CardHeader>
           <CardContent>
             <RentabilidadChart data={stats} />
