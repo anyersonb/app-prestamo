@@ -69,7 +69,12 @@ export default async function DashboardPage() {
           )}
           {HAS_SUPABASE && (
             <>
-              <AccionesHeader clientes={clienteOpts} hoy={r.hoy} />
+              <AccionesHeader
+                clientes={clienteOpts}
+                hoy={r.hoy}
+                cajaActual={r.cajaDisponible}
+                ajusteActual={dataset.config.ajuste_caja ?? 0}
+              />
               <LogoutButton />
             </>
           )}

@@ -6,7 +6,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { UserPlus, Plus } from "lucide-react";
+import { UserPlus, Plus, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { Input } from "@/components/ui/input";
@@ -18,22 +18,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { crearCliente, crearPrestamo } from "@/lib/actions";
+import { ajustarCaja, crearCliente, crearPrestamo } from "@/lib/actions";
+import { formatPEN } from "@/lib/format";
 
 type ClienteOpt = { id: string; nombre: string };
 
 export function AccionesHeader({
   clientes,
   hoy,
+  cajaActual,
+  ajusteActual,
 }: {
   clientes: ClienteOpt[];
   hoy: string;
+  cajaActual: number;
+  ajusteActual: number;
 }) {
   const [openCliente, setOpenCliente] = React.useState(false);
   const [openPrestamo, setOpenPrestamo] = React.useState(false);
+  const [openCaja, setOpenCaja] = React.useState(false);
 
   return (
     <>
+      <Button size="sm" variant="outline" onClick={() => setOpenCaja(true)}>
+        <Wallet className="h-4 w-4" />
+        <span className="hidden sm:inline">Ajustar caja</span>
+      </Button>
       <Button size="sm" variant="outline" onClick={() => setOpenCliente(true)}>
         <UserPlus className="h-4 w-4" />
         <span className="hidden sm:inline">Nuevo cliente</span>
@@ -43,6 +53,12 @@ export function AccionesHeader({
         <span className="hidden sm:inline">Nuevo préstamo</span>
       </Button>
 
+      <CajaForm
+        open={openCaja}
+        onClose={() => setOpenCaja(false)}
+        cajaActual={cajaActual}
+        ajusteActual={ajusteActual}
+      />
       <ClienteForm open={openCliente} onClose={() => setOpenCliente(false)} />
       <PrestamoForm
         open={openPrestamo}
@@ -51,6 +67,83 @@ export function AccionesHeader({
         hoy={hoy}
       />
     </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+function CajaForm({
+  open,
+  onClose,
+  cajaActual,
+  ajusteActual,
+}: {
+  open: boolean;
+  onClose: () => void;
+  cajaActual: number;
+  ajusteActual: number;
+}) {
+  const router = useRouter();
+  const [saving, setSaving] = React.useState(false);
+  const [real, setReal] = React.useState(String(Math.round(cajaActual)));
+
+  React.useEffect(() => {
+    if (open) setReal(String(Math.round(cajaActual)));
+  }, [open, cajaActual]);
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    const res = await ajustarCaja({
+      real: Number(real),
+      cajaActual,
+      ajusteActual,
+    });
+    setSaving(false);
+    if (res.ok) {
+      toast.success("Caja ajustada al efectivo real");
+      onClose();
+      router.refresh();
+    } else {
+      toast.error(res.error);
+    }
+  }
+
+  return (
+    <Modal
+      open={open}
+      onClose={() => !saving && onClose()}
+      title="Ajustar caja al efectivo real"
+      description="Fija tu efectivo disponible real. No afecta el ROI ni los intereses."
+    >
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div className="rounded-lg bg-muted/50 px-3 py-2 text-sm">
+          <span className="text-muted-foreground">Caja mostrada actual: </span>
+          <span className="font-semibold tabular-nums">{formatPEN(cajaActual)}</span>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="caja-real">Efectivo real disponible (S/)</Label>
+          <Input
+            id="caja-real"
+            type="number"
+            step="0.01"
+            value={real}
+            onChange={(e) => setReal(e.target.value)}
+            autoFocus
+          />
+          <p className="text-xs text-muted-foreground">
+            De aquí en adelante la caja se moverá sola con cobros y préstamos.
+          </p>
+        </div>
+        <div className="flex justify-end gap-2 pt-1">
+          <Button type="button" variant="ghost" onClick={onClose} disabled={saving}>
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={saving}>
+            {saving ? "Guardando…" : "Ajustar caja"}
+          </Button>
+        </div>
+      </form>
+    </Modal>
   );
 }
 

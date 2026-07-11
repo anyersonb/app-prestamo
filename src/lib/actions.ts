@@ -114,6 +114,38 @@ export async function registrarCobro(input: {
 }
 
 // ----------------------------------------------------------------------------
+// AJUSTAR CAJA — reconciliar el efectivo REAL con el valor derivado. Guarda un
+// delta en config.ajuste_caja tal que la Caja mostrada pase a `real`. No toca
+// ROI ni intereses. newAjuste = ajusteActual + (real − cajaMostradaActual).
+// ----------------------------------------------------------------------------
+export async function ajustarCaja(input: {
+  real: number;
+  cajaActual: number; // caja mostrada actual (ya incluye el ajuste vigente)
+  ajusteActual: number;
+}): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const real = Number(input.real);
+    if (!Number.isFinite(real)) {
+      return { ok: false, error: "Ingresa un monto válido." };
+    }
+    const nuevoAjuste = Number(
+      (input.ajusteActual + (real - input.cajaActual)).toFixed(2),
+    );
+    const { error } = await supabase
+      .from("config")
+      .update({ ajuste_caja: nuevoAjuste })
+      .eq("id", 1);
+    if (error) return { ok: false, error: error.message };
+
+    revalidatePath("/");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+// ----------------------------------------------------------------------------
 // CREAR CLIENTE
 // ----------------------------------------------------------------------------
 export async function crearCliente(input: {

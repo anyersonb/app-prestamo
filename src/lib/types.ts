@@ -89,6 +89,12 @@ export interface Config {
   aporte_inicial: number;
   /** Deuda total del carro que se amortiza con el 60% de los intereses. */
   deuda_carro_total: number;
+  /**
+   * Ajuste manual de Caja (delta) para reconciliar el efectivo REAL con el
+   * valor derivado. No afecta ROI ni intereses; solo la "Caja disponible" y el
+   * patrimonio. Se mueve con futuros cobros/préstamos desde el baseline fijado.
+   */
+  ajuste_caja?: number;
   distribucion: Distribucion;
 }
 

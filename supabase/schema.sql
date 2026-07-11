@@ -120,7 +120,8 @@ create table if not exists config (
   pct_carro          numeric(4,3) not null default 0.60,
   pct_reinversion    numeric(4,3) not null default 0.25,
   pct_ahorro         numeric(4,3) not null default 0.10,
-  pct_gastos         numeric(4,3) not null default 0.05
+  pct_gastos         numeric(4,3) not null default 0.05,
+  ajuste_caja        numeric(12,2) not null default 0  -- delta manual para reconciliar Caja con el efectivo real
 );
 comment on table config is 'Parámetros globales del negocio: tipo de cambio, capital semilla y porcentajes de distribución de intereses.';
 

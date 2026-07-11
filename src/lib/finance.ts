@@ -127,7 +127,8 @@ export function buildFinance(data: Dataset) {
       config.aporte_inicial -
       colocadoOriginal +
       capitalRecuperado() +
-      interesesCobradosAcum() * D.reinversion
+      interesesCobradosAcum() * D.reinversion +
+      (config.ajuste_caja ?? 0) // reconciliación manual con el efectivo real
     );
   };
 
