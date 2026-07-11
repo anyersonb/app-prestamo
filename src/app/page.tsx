@@ -8,6 +8,7 @@ import { buildFinance, UMBRAL_LIQUIDEZ } from "@/lib/finance";
 import { getDataset, HAS_SUPABASE } from "@/lib/data";
 import { LogoutButton } from "@/components/dashboard/logout-button";
 import { AccionesHeader } from "@/components/dashboard/acciones-header";
+import { AppNav } from "@/components/dashboard/app-nav";
 import { formatFechaLarga, formatPct, formatPEN } from "@/lib/format";
 import {
   AlertTriangle,
@@ -67,6 +68,7 @@ export default async function DashboardPage() {
               Datos de ejemplo (mock)
             </Badge>
           )}
+          <AppNav />
           {HAS_SUPABASE && (
             <>
               <AccionesHeader

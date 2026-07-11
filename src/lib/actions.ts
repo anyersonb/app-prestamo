@@ -12,7 +12,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "./supabase/server";
 import { createAdminClient, HAS_SERVICE_ROLE } from "./supabase/admin";
-import type { Moneda } from "./types";
+import type { EstadoPrestamo, Moneda } from "./types";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -179,6 +179,75 @@ export async function crearCliente(input: {
     if (error) return { ok: false, error: error.message };
 
     revalidatePath("/");
+    revalidatePath("/clientes");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+// ----------------------------------------------------------------------------
+// EDITAR CLIENTE
+// ----------------------------------------------------------------------------
+export async function editarCliente(input: {
+  id: string;
+  nombre: string;
+  dni?: string;
+  celular?: string;
+  direccion?: string;
+  trabajo?: string;
+  empresa?: string;
+  referido_por?: string;
+  score: number;
+  observaciones?: string;
+}): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const nombre = input.nombre?.trim();
+    if (!nombre) return { ok: false, error: "El nombre es obligatorio." };
+    const score = Math.min(5, Math.max(1, Number(input.score) || 3));
+
+    const { error } = await supabase
+      .from("clientes")
+      .update({
+        nombre,
+        dni: input.dni?.trim() || null,
+        celular: input.celular?.trim() || null,
+        direccion: input.direccion?.trim() || null,
+        trabajo: input.trabajo?.trim() || null,
+        empresa: input.empresa?.trim() || null,
+        referido_por: input.referido_por?.trim() || null,
+        score,
+        observaciones: input.observaciones?.trim() || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", input.id);
+    if (error) return { ok: false, error: error.message };
+
+    revalidatePath("/");
+    revalidatePath("/clientes");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ELIMINAR CLIENTE — la FK de prestamos es on delete restrict: si el cliente
+// tiene préstamos, Postgres lo bloquea y devolvemos un error entendible.
+// ----------------------------------------------------------------------------
+export async function eliminarCliente(id: string): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const { error } = await supabase.from("clientes").delete().eq("id", id);
+    if (error) {
+      const msg = /foreign key|violates/i.test(error.message)
+        ? "No se puede borrar: el cliente tiene préstamos. Elimina o reasigna sus préstamos primero."
+        : error.message;
+      return { ok: false, error: msg };
+    }
+    revalidatePath("/");
+    revalidatePath("/clientes");
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
@@ -229,6 +298,115 @@ export async function crearPrestamo(input: {
     });
 
     revalidatePath("/");
+    revalidatePath("/prestamos");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+// ----------------------------------------------------------------------------
+// EDITAR PRÉSTAMO — recalcula interes_mensual = capital * tasa%. Permite ajustar
+// capital pendiente y estado manualmente.
+// ----------------------------------------------------------------------------
+export async function editarPrestamo(input: {
+  id: string;
+  capital: number;
+  moneda: Moneda;
+  tasaInteres: number;
+  diaPago: number;
+  estado: EstadoPrestamo;
+  capitalPendiente: number;
+}): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const capital = Number(input.capital) || 0;
+    const tasa = Number(input.tasaInteres) || 0;
+    if (capital <= 0) return { ok: false, error: "El capital debe ser mayor a 0." };
+
+    const interesMensual = Number((capital * (tasa / 100)).toFixed(2));
+    const diaPago = Math.min(28, Math.max(1, Number(input.diaPago) || 1));
+    const capitalPendiente = Math.max(0, Number(input.capitalPendiente) || 0);
+
+    const { error } = await supabase
+      .from("prestamos")
+      .update({
+        capital,
+        moneda: input.moneda,
+        tasa_interes: tasa,
+        interes_mensual: interesMensual,
+        dia_pago: diaPago,
+        estado: input.estado,
+        capital_pendiente: capitalPendiente,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", input.id);
+    if (error) return { ok: false, error: error.message };
+
+    revalidatePath("/");
+    revalidatePath("/prestamos");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ELIMINAR PRÉSTAMO — borra el préstamo y sus pagos (cascade en la FK).
+// ----------------------------------------------------------------------------
+export async function eliminarPrestamo(id: string): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const { error } = await supabase.from("prestamos").delete().eq("id", id);
+    if (error) return { ok: false, error: error.message };
+    revalidatePath("/");
+    revalidatePath("/prestamos");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ELIMINAR PAGO (corregir cobro mal registrado). Si era 'capital', devuelve el
+// monto a capital_pendiente y reactiva el préstamo si estaba 'pagado'.
+// ----------------------------------------------------------------------------
+export async function eliminarPago(id: string): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const { data: pago } = await supabase
+      .from("pagos")
+      .select("tipo, monto, prestamo_id")
+      .eq("id", id)
+      .single();
+
+    const { error } = await supabase.from("pagos").delete().eq("id", id);
+    if (error) return { ok: false, error: error.message };
+
+    if (pago && pago.tipo === "capital") {
+      const { data: prest } = await supabase
+        .from("prestamos")
+        .select("capital_pendiente, capital, estado")
+        .eq("id", pago.prestamo_id)
+        .single();
+      if (prest) {
+        const restaurado = Math.min(
+          Number(prest.capital),
+          Number(prest.capital_pendiente) + Number(pago.monto),
+        );
+        await supabase
+          .from("prestamos")
+          .update({
+            capital_pendiente: restaurado,
+            estado: prest.estado === "pagado" ? "activo" : prest.estado,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", pago.prestamo_id);
+      }
+    }
+
+    revalidatePath("/");
+    revalidatePath("/prestamos");
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
