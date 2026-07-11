@@ -146,6 +146,51 @@ export async function ajustarCaja(input: {
 }
 
 // ----------------------------------------------------------------------------
+// CARRO — deuda real y abonos manuales.
+//  - abonarCarro: suma un pago real a amortizacion_carro (reduce el saldo).
+//  - ajustarDeudaCarro: fija el saldo base de la deuda.
+// ----------------------------------------------------------------------------
+export async function abonarCarro(input: {
+  monto: number;
+  amortizadoActual: number;
+}): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const monto = Number(input.monto);
+    if (!(monto > 0)) return { ok: false, error: "El abono debe ser mayor a 0." };
+    const nuevo = Number((Number(input.amortizadoActual) + monto).toFixed(2));
+    const { error } = await supabase
+      .from("config")
+      .update({ amortizacion_carro: nuevo })
+      .eq("id", 1);
+    if (error) return { ok: false, error: error.message };
+    revalidatePath("/");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+export async function ajustarDeudaCarro(input: {
+  total: number;
+}): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const total = Number(input.total);
+    if (!(total >= 0)) return { ok: false, error: "Monto inválido." };
+    const { error } = await supabase
+      .from("config")
+      .update({ deuda_carro_total: total })
+      .eq("id", 1);
+    if (error) return { ok: false, error: error.message };
+    revalidatePath("/");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+// ----------------------------------------------------------------------------
 // CREAR CLIENTE
 // ----------------------------------------------------------------------------
 export async function crearCliente(input: {

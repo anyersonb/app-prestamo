@@ -87,8 +87,10 @@ export interface Config {
   tipo_cambio: number;
   /** Capital semilla aportado a la Caja. */
   aporte_inicial: number;
-  /** Deuda total del carro que se amortiza con el 60% de los intereses. */
+  /** Deuda del carro (saldo base desde que se empezó a registrar). */
   deuda_carro_total: number;
+  /** Total realmente abonado al carro (pagos manuales). Saldo = total − esto. */
+  amortizacion_carro?: number;
   /**
    * Ajuste manual de Caja (delta) para reconciliar el efectivo REAL con el
    * valor derivado. No afecta ROI ni intereses; solo la "Caja disponible" y el

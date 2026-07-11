@@ -11,6 +11,7 @@ import { AccionesHeader } from "@/components/dashboard/acciones-header";
 import { AppNav } from "@/components/dashboard/app-nav";
 import { formatFechaLarga, formatPct, formatPEN } from "@/lib/format";
 import { DetallesFinancieros } from "@/components/dashboard/detalles-financieros";
+import { CarroActions } from "@/components/dashboard/carro-actions";
 import { cn } from "@/lib/utils";
 import {
   AlertTriangle,
@@ -240,18 +241,26 @@ export default async function DashboardPage() {
 
       {/* Fila 4 — Fondo carro / Distribución / Clientes */}
       <section className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        {/* Fondo del carro */}
+        {/* Deuda del carro (real) */}
         <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <Car className="h-4 w-4 text-muted-foreground" />
-            <CardTitle className="text-base">Fondo del carro</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Car className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-base">Deuda del carro</CardTitle>
+            </div>
+            <CarroActions
+              total={r.fondoCarro.total}
+              amortizado={r.fondoCarro.amortizado}
+              restante={r.fondoCarro.restante}
+            />
           </CardHeader>
           <CardContent>
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-2xl font-bold">{formatPEN(r.fondoCarro.amortizado)}</p>
-                <p className="text-xs text-muted-foreground">
-                  amortizado de {formatPEN(r.fondoCarro.total)}
+                <p className="text-xs text-muted-foreground">Debes</p>
+                <p className="text-2xl font-bold">{formatPEN(r.fondoCarro.restante)}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  de {formatPEN(r.fondoCarro.total)} · abonado {formatPEN(r.fondoCarro.amortizado)}
                 </p>
               </div>
               <span className="text-sm font-semibold text-emerald-500">
@@ -260,7 +269,7 @@ export default async function DashboardPage() {
             </div>
             <Progress value={r.fondoCarro.avance} className="mt-3 h-2" />
             <p className="mt-2 text-xs text-muted-foreground">
-              Falta {formatPEN(r.fondoCarro.restante)}. Se nutre del 60% de los intereses. Nunca se presta.
+              Cada abono que registres reduce tu deuda real del carro.
             </p>
           </CardContent>
         </Card>

@@ -138,14 +138,14 @@ export function buildFinance(data: Dataset) {
     return total > 0 ? (caja / total) * 100 : 0;
   };
 
+  // Deuda REAL del carro: se reduce con los abonos manuales registrados
+  // (config.amortizacion_carro), no con el 60% teórico de los intereses.
   const fondoCarro = () => {
-    const amortizado = interesesCobradosAcum() * D.carro;
-    const restante = Math.max(0, config.deuda_carro_total - amortizado);
-    const avance =
-      config.deuda_carro_total > 0
-        ? (amortizado / config.deuda_carro_total) * 100
-        : 0;
-    return { amortizado, restante, avance, total: config.deuda_carro_total };
+    const total = config.deuda_carro_total;
+    const amortizado = config.amortizacion_carro ?? 0;
+    const restante = Math.max(0, total - amortizado);
+    const avance = total > 0 ? (amortizado / total) * 100 : 0;
+    return { amortizado, restante, avance, total };
   };
 
   const rentabilidadMes = (year: number, month: number) => {

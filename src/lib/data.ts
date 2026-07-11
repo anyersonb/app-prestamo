@@ -96,6 +96,7 @@ export async function getDataset(): Promise<Dataset> {
       tipo_cambio: Number(cfg.tipo_cambio),
       aporte_inicial: Number(cfg.aporte_inicial),
       deuda_carro_total: Number(cfg.deuda_carro_total),
+      amortizacion_carro: Number(cfg.amortizacion_carro ?? 0),
       ajuste_caja: Number(cfg.ajuste_caja ?? 0),
       distribucion: {
         carro: Number(cfg.pct_carro),
