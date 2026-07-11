@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import type { CobroDia } from "@/lib/finance";
 import { formatFechaCorta, formatPEN } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { CobrarButton } from "./cobrar-button";
 
 const CFG: Record<string, { label: string; clase: string }> = {
   vencido: { label: "Vencido", clase: "bg-red-500/15 text-red-500 border-red-500/20" },
@@ -9,7 +10,7 @@ const CFG: Record<string, { label: string; clase: string }> = {
   proximo: { label: "Próximo", clase: "bg-sky-500/15 text-sky-500 border-sky-500/20" },
 };
 
-export function CalendarioCobros({ cobros }: { cobros: CobroDia[] }) {
+export function CalendarioCobros({ cobros, hoy }: { cobros: CobroDia[]; hoy: string }) {
   return (
     <div className="divide-y divide-border">
       {cobros.map((c) => (
@@ -40,9 +41,12 @@ export function CalendarioCobros({ cobros }: { cobros: CobroDia[] }) {
                 Pagado
               </Badge>
             ) : (
-              <Badge variant="outline" className={CFG[c.estado].clase}>
-                {CFG[c.estado].label}
-              </Badge>
+              <>
+                <Badge variant="outline" className={cn("hidden sm:inline-flex", CFG[c.estado].clase)}>
+                  {CFG[c.estado].label}
+                </Badge>
+                <CobrarButton cobro={c} hoy={hoy} />
+              </>
             )}
           </div>
         </div>

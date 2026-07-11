@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { buildFinance, UMBRAL_LIQUIDEZ } from "@/lib/finance";
 import { getDataset, HAS_SUPABASE } from "@/lib/data";
 import { LogoutButton } from "@/components/dashboard/logout-button";
+import { AccionesHeader } from "@/components/dashboard/acciones-header";
 import { formatFechaLarga, formatPct, formatPEN } from "@/lib/format";
 import {
   AlertTriangle,
@@ -28,6 +29,9 @@ export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const dataset = await getDataset();
+  const clienteOpts = dataset.clientes
+    .map((c) => ({ id: c.id, nombre: c.nombre }))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre));
   const fin = buildFinance(dataset);
   const r = fin.dashboardResumen();
   const stats = fin.monthlyStats(12);
@@ -53,7 +57,7 @@ export default async function DashboardPage() {
             Financiera privada · {formatFechaLarga(r.hoy)}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {HAS_SUPABASE ? (
             <Badge variant="outline" className="w-fit border-emerald-500/30 bg-emerald-500/10 text-emerald-500">
               Datos reales · Supabase
@@ -63,7 +67,12 @@ export default async function DashboardPage() {
               Datos de ejemplo (mock)
             </Badge>
           )}
-          {HAS_SUPABASE && <LogoutButton />}
+          {HAS_SUPABASE && (
+            <>
+              <AccionesHeader clientes={clienteOpts} hoy={r.hoy} />
+              <LogoutButton />
+            </>
+          )}
         </div>
       </header>
 
@@ -169,7 +178,7 @@ export default async function DashboardPage() {
             <CardTitle className="text-base">Calendario de cobros</CardTitle>
           </CardHeader>
           <CardContent className="max-h-[300px] overflow-y-auto">
-            <CalendarioCobros cobros={cobros} />
+            <CalendarioCobros cobros={cobros} hoy={r.hoy} />
           </CardContent>
         </Card>
       </section>
