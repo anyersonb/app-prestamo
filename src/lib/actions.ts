@@ -11,17 +11,21 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "./supabase/server";
+import { createAdminClient, HAS_SERVICE_ROLE } from "./supabase/admin";
 import type { Moneda } from "./types";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
+// Verifica que haya sesión (autorización) y devuelve el cliente para ESCRIBIR:
+// service-role si está disponible (bypassa RLS, fiable en Vercel), si no el de
+// sesión. La autorización sigue exigiendo estar logueado.
 async function requireUser() {
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Sesión no válida. Vuelve a iniciar sesión.");
-  return supabase;
+  return HAS_SERVICE_ROLE ? createAdminClient() : supabase;
 }
 
 // ----------------------------------------------------------------------------

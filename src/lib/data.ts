@@ -10,6 +10,7 @@ import type { Dataset } from "./finance";
 import type { Cliente, Config, Pago, Prestamo } from "./types";
 import { clientes as mockClientes, config as mockConfig, HOY, pagos as mockPagos, prestamos as mockPrestamos } from "./mock-data";
 import { createClient } from "./supabase/server";
+import { createAdminClient, HAS_SERVICE_ROLE } from "./supabase/admin";
 
 export const HAS_SUPABASE = Boolean(
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -34,7 +35,9 @@ export async function getDataset(): Promise<Dataset> {
   if (!HAS_SUPABASE) return getMockDataset();
 
   try {
-    const supabase = createClient();
+    // Preferir service-role (bypassa RLS, no depende de la sesión por-request,
+    // fiable en Vercel). Fallback al cliente de sesión si no hay service key.
+    const supabase = HAS_SERVICE_ROLE ? createAdminClient() : createClient();
     const [clientesRes, prestamosRes, pagosRes, configRes] = await Promise.all([
       supabase.from("clientes").select("*"),
       supabase.from("prestamos").select("*"),
