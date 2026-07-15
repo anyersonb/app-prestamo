@@ -40,6 +40,9 @@ export default async function DashboardPage() {
   const cobros = fin.calendarioCobros();
   const mom = r.comparativaMoM;
   const liquidezBaja = r.liquidez < UMBRAL_LIQUIDEZ;
+  const cupo = r.cupoHoy;
+  // Origen real de los datos (no solo si hay envs): real / demo / error.
+  const source = dataset.source ?? (HAS_SUPABASE ? "supabase" : "mock");
 
   const pendientesCount = cobros.filter((c) => !c.pagado).length;
   const vencidosCount = cobros.filter((c) => !c.pagado && c.estado === "vencido").length;
@@ -106,13 +109,19 @@ export default async function DashboardPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {HAS_SUPABASE ? (
+          {source === "supabase" && (
             <Badge variant="outline" className="w-fit border-emerald-500/30 bg-emerald-500/10 text-emerald-500">
               Datos reales · Supabase
             </Badge>
-          ) : (
+          )}
+          {source === "mock" && (
             <Badge variant="outline" className="w-fit border-amber-500/30 bg-amber-500/10 text-amber-500">
-              Datos de ejemplo (mock)
+              Datos de ejemplo (demo)
+            </Badge>
+          )}
+          {source === "fallback" && (
+            <Badge variant="outline" className="w-fit border-red-500/40 bg-red-500/10 text-red-500">
+              ⚠ Sin conexión · datos no confiables
             </Badge>
           )}
           <AppNav />
@@ -129,6 +138,65 @@ export default async function DashboardPage() {
           )}
         </div>
       </header>
+
+      {/* Aviso CRÍTICO: la BD está configurada pero no se pudo leer.
+          No dejar que se tomen decisiones con datos de ejemplo. */}
+      {source === "fallback" && (
+        <div className="mt-5 flex items-start gap-3 rounded-xl border border-red-500/40 bg-red-500/10 p-4 sm:p-5">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+          <div>
+            <p className="text-sm font-semibold text-red-500">
+              No se pudo leer la base de datos — estás viendo datos de ejemplo
+            </p>
+            <p className="mt-0.5 text-sm text-muted-foreground">
+              Las cifras de abajo NO son reales. No tomes ninguna decisión con ellas.
+              Revisa la conexión con Supabase (variables de entorno o servicio caído) y recarga.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ¿Cuánto puedo prestar hoy? — la decisión #1 del día */}
+      <section className="mt-5">
+        <Card
+          className={cn(
+            "border",
+            cupo.sinMargen ? "border-red-500/40" : "border-emerald-500/40",
+          )}
+        >
+          <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                ¿Cuánto puedo prestar hoy?
+              </p>
+              <p
+                className={cn(
+                  "mt-1 text-4xl font-bold tabular-nums sm:text-5xl",
+                  cupo.sinMargen ? "text-red-500" : "text-emerald-500",
+                )}
+              >
+                {formatPEN(cupo.cupo)}
+              </p>
+              <p className="mt-1.5 max-w-xl text-sm text-muted-foreground">
+                {cupo.sinMargen
+                  ? `Tu liquidez está en ${formatPct(cupo.liquidezActual)} (umbral ${cupo.umbral}%). No prestes hoy: prioriza cobrar para recuperar caja.`
+                  : `Puedes colocar hasta este monto manteniendo tu liquidez sobre el ${cupo.umbral}%. Tienes ${formatPEN(cupo.caja)} en caja.`}
+              </p>
+            </div>
+            <div
+              className={cn(
+                "flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl",
+                cupo.sinMargen
+                  ? "bg-red-500/10 text-red-500"
+                  : "bg-emerald-500/10 text-emerald-500",
+              )}
+              aria-hidden="true"
+            >
+              <HandCoins className="h-8 w-8" />
+            </div>
+          </CardContent>
+        </Card>
+      </section>
 
       {/* Resumen del mes en lenguaje humano */}
       <div
@@ -331,9 +399,9 @@ export default async function DashboardPage() {
       </section>
 
       <footer className="mt-8 text-center text-xs text-muted-foreground">
-        {HAS_SUPABASE
-          ? "MVP · Datos en vivo desde Supabase · Financiera privada"
-          : "MVP · Datos de ejemplo desde Control_Prestamos.xlsx · Conecta Supabase para producción"}
+        {source === "supabase" && "MVP · Datos en vivo desde Supabase · Financiera privada"}
+        {source === "mock" && "MVP · Datos de ejemplo (demo) · Conecta Supabase para producción"}
+        {source === "fallback" && "MVP · Sin conexión a Supabase · mostrando datos de ejemplo NO confiables"}
       </footer>
     </div>
   );

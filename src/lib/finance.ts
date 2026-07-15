@@ -22,6 +22,13 @@ export interface Dataset {
   pagos: Pago[];
   config: Config;
   hoy: string; // YYYY-MM-DD de referencia
+  /**
+   * Origen real de los datos, para no engañar a quien decide:
+   *  - "supabase": datos en vivo (confiables).
+   *  - "mock": no hay Supabase configurado (demo local).
+   *  - "fallback": Supabase configurado PERO la lectura falló → cifras NO confiables.
+   */
+  source?: "supabase" | "mock" | "fallback";
 }
 
 export type EstadoCobro = "vencido" | "hoy" | "proximo";
@@ -136,6 +143,28 @@ export function buildFinance(data: Dataset) {
     const caja = cajaDisponible();
     const total = caja + capitalColocado();
     return total > 0 ? (caja / total) * 100 : 0;
+  };
+
+  /**
+   * ¿Cuánto puedo prestar HOY sin que mi liquidez baje del umbral?
+   * Prestar X mueve X de Caja a Capital colocado (el total caja+colocado no
+   * cambia). Queremos que (caja − X) / total >= umbral, de donde:
+   *   X <= caja − umbral·total
+   * El cupo nunca es negativo ni mayor que la caja disponible.
+   */
+  const cupoPrestableHoy = () => {
+    const caja = cajaDisponible();
+    const total = caja + capitalColocado();
+    const u = UMBRAL_LIQUIDEZ / 100;
+    const cupo = Math.max(0, Math.min(caja, caja - u * total));
+    return {
+      cupo,
+      caja,
+      liquidezActual: total > 0 ? (caja / total) * 100 : 0,
+      umbral: UMBRAL_LIQUIDEZ,
+      // true cuando ya no hay margen: prestar cualquier cosa rompe el umbral.
+      sinMargen: cupo <= 0,
+    };
   };
 
   // Deuda REAL del carro: se reduce con los abonos manuales registrados
@@ -294,6 +323,7 @@ export function buildFinance(data: Dataset) {
       rentabilidadMes: mom.actual,
       comparativaMoM: mom,
       liquidez: liquidez(),
+      cupoHoy: cupoPrestableHoy(),
       clientes: conteoClientes(),
       fondoCarro: fondoCarro(),
       roi: roiAcumulado(),
@@ -313,6 +343,7 @@ export function buildFinance(data: Dataset) {
     fondoCarro,
     conteoClientes,
     liquidez,
+    cupoPrestableHoy,
     rentabilidadMes,
   };
 }

@@ -21,18 +21,20 @@ function hoyISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-function getMockDataset(): Dataset {
+function getMockDataset(source: "mock" | "fallback" = "mock"): Dataset {
   return {
     clientes: mockClientes,
     prestamos: mockPrestamos,
     pagos: mockPagos,
     config: mockConfig,
     hoy: HOY,
+    source,
   };
 }
 
 export async function getDataset(): Promise<Dataset> {
-  if (!HAS_SUPABASE) return getMockDataset();
+  // Sin Supabase configurado: es una demo local declarada, no un engaño.
+  if (!HAS_SUPABASE) return getMockDataset("mock");
 
   try {
     // Preferir service-role (bypassa RLS, no depende de la sesión por-request,
@@ -45,14 +47,16 @@ export async function getDataset(): Promise<Dataset> {
       supabase.from("config").select("*").eq("id", 1).maybeSingle(),
     ]);
 
-    // Si aún no hay datos o no se pudo leer, caemos al mock (resiliencia).
+    // Supabase configurado pero la lectura falló: NO fingir que son datos
+    // reales. Marcar como "fallback" para que la UI advierta y no se decida
+    // con cifras de ejemplo.
     if (
       clientesRes.error ||
       prestamosRes.error ||
       pagosRes.error ||
       !configRes.data
     ) {
-      return getMockDataset();
+      return getMockDataset("fallback");
     }
 
     const clientes: Cliente[] = (clientesRes.data ?? []).map((c) => ({
@@ -106,8 +110,8 @@ export async function getDataset(): Promise<Dataset> {
       },
     };
 
-    return { clientes, prestamos, pagos, config, hoy: hoyISO() };
+    return { clientes, prestamos, pagos, config, hoy: hoyISO(), source: "supabase" };
   } catch {
-    return getMockDataset();
+    return getMockDataset("fallback");
   }
 }
