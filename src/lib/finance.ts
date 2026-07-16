@@ -57,6 +57,8 @@ export interface CarteraMoraItem {
   diaHoy: boolean;
   /** Sugerencia automática: pasó el día y no se ha cobrado el interés. */
   sugerenciaMora: boolean;
+  /** Prestado este mes: su primer cobro es el mes siguiente (aún no exigible). */
+  noExigibleAun: boolean;
   estado: Prestamo["estado"];
 }
 
@@ -113,9 +115,14 @@ export function buildFinance(data: Dataset) {
       .filter((p) => p.tipo === "interes")
       .reduce((s, p) => s + toPEN(p.monto, p.moneda), 0);
 
+  // Un préstamo solo debe interés en un mes si EMPEZÓ antes de ese mes. Si se
+  // prestó este mismo mes, el primer cobro es el mes siguiente (no está vencido).
+  const exigibleEsteMes = (p: Prestamo) => ym(p.fecha_inicio) < HOY_YM;
+
   const interesesPendientesMes = () =>
     prestamos
       .filter((p) => p.estado !== "pagado")
+      .filter(exigibleEsteMes)
       .filter((p) => !pagoRegistrado(p.id, HOY_Y, HOY_M))
       .reduce((s, p) => s + toPEN(p.interes_mensual, p.moneda), 0);
 
@@ -297,6 +304,9 @@ export function buildFinance(data: Dataset) {
 
     for (const p of prestamos) {
       if (p.estado === "pagado") continue;
+      // Prestado este mes (o a futuro): su primer cobro es el mes siguiente,
+      // no corresponde al calendario de este mes.
+      if (!exigibleEsteMes(p)) continue;
       const dia = Math.min(p.dia_pago, 28);
       const fecha = `${HOY_Y}-${String(HOY_M).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
       const pagado = pagoRegistrado(p.id, HOY_Y, HOY_M);
@@ -339,6 +349,7 @@ export function buildFinance(data: Dataset) {
         const interesCobradoMes = pagoRegistrado(p.id, HOY_Y, HOY_M);
         const diaPasado = dia < HOY_D;
         const diaHoy = dia === HOY_D;
+        const noExigibleAun = !exigibleEsteMes(p);
         return {
           prestamo: p,
           clienteNombre: nombre.get(p.cliente_id) ?? p.cliente_id,
@@ -346,7 +357,9 @@ export function buildFinance(data: Dataset) {
           interesCobradoMes,
           diaPasado,
           diaHoy,
-          sugerenciaMora: diaPasado && !interesCobradoMes,
+          // No sugerir mora si el préstamo aún no debe interés este mes.
+          sugerenciaMora: diaPasado && !interesCobradoMes && !noExigibleAun,
+          noExigibleAun,
           estado: p.estado,
         };
       })

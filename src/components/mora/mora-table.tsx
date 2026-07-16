@@ -82,7 +82,11 @@ export function MoraTable({
               <TableCell className="text-center tabular-nums">{it.dia}</TableCell>
 
               <TableCell>
-                {it.interesCobradoMes ? (
+                {it.noExigibleAun ? (
+                  <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <CircleDot className="h-4 w-4" /> Primer cobro el próximo mes
+                  </span>
+                ) : it.interesCobradoMes ? (
                   <span className="inline-flex items-center gap-1.5 text-sm text-emerald-500">
                     <Check className="h-4 w-4" /> Cobrado
                   </span>
