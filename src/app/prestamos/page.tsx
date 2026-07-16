@@ -112,6 +112,7 @@ export default async function PrestamosPage() {
                         prestamo={p}
                         clienteNombre={nombre.get(p.cliente_id) ?? "—"}
                         pagos={pagos}
+                        hoy={r.hoy}
                       />
                     </TableCell>
                   </TableRow>

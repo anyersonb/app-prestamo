@@ -44,6 +44,22 @@ export interface CobroDia {
   pagado: boolean;
 }
 
+/** Fila de la vista "Estado de cartera / Mora": estado real + sugerencia. */
+export interface CarteraMoraItem {
+  prestamo: Prestamo;
+  clienteNombre: string;
+  dia: number;
+  /** ¿Ya se registró el interés de ESTE mes? */
+  interesCobradoMes: boolean;
+  /** El día de pago ya pasó este mes. */
+  diaPasado: boolean;
+  /** El día de pago es hoy. */
+  diaHoy: boolean;
+  /** Sugerencia automática: pasó el día y no se ha cobrado el interés. */
+  sugerenciaMora: boolean;
+  estado: Prestamo["estado"];
+}
+
 const MESES_ABBR = [
   "Ene", "Feb", "Mar", "Abr", "May", "Jun",
   "Jul", "Ago", "Set", "Oct", "Nov", "Dic",
@@ -309,6 +325,39 @@ export function buildFinance(data: Dataset) {
     );
   };
 
+  /**
+   * Estado de cartera para validar la MORA. Por cada préstamo vivo indica si ya
+   * se cobró el interés del mes y sugiere "en mora" cuando el día de pago pasó
+   * sin cobro. La sugerencia NO cambia nada: el dueño confirma o corrige.
+   */
+  const carteraMora = (): CarteraMoraItem[] => {
+    const nombre = new Map(clientes.map((c) => [c.id, c.nombre]));
+    return prestamos
+      .filter((p) => p.estado !== "pagado")
+      .map((p) => {
+        const dia = Math.min(p.dia_pago, 28);
+        const interesCobradoMes = pagoRegistrado(p.id, HOY_Y, HOY_M);
+        const diaPasado = dia < HOY_D;
+        const diaHoy = dia === HOY_D;
+        return {
+          prestamo: p,
+          clienteNombre: nombre.get(p.cliente_id) ?? p.cliente_id,
+          dia,
+          interesCobradoMes,
+          diaPasado,
+          diaHoy,
+          sugerenciaMora: diaPasado && !interesCobradoMes,
+          estado: p.estado,
+        };
+      })
+      .sort((a, b) => {
+        // En mora primero, luego los sugeridos, luego al día. Empates por día.
+        const rank = (x: CarteraMoraItem) =>
+          x.estado === "moroso" ? 0 : x.sugerenciaMora ? 1 : 2;
+        return rank(a) - rank(b) || a.dia - b.dia;
+      });
+  };
+
   const dashboardResumen = () => {
     const mom = comparativaMoM();
     return {
@@ -339,6 +388,7 @@ export function buildFinance(data: Dataset) {
     dashboardResumen,
     monthlyStats,
     calendarioCobros,
+    carteraMora,
     comparativaMoM,
     fondoCarro,
     conteoClientes,

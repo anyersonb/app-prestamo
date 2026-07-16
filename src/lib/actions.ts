@@ -397,6 +397,122 @@ export async function editarPrestamo(input: {
 }
 
 // ----------------------------------------------------------------------------
+// MARCAR MORA — cambio rápido de estado (activo ↔ moroso) desde la vista de
+// cartera, sin abrir el formulario completo. Valida contra los 3 estados.
+// ----------------------------------------------------------------------------
+export async function setEstadoPrestamo(input: {
+  id: string;
+  estado: EstadoPrestamo;
+}): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const validos: EstadoPrestamo[] = ["activo", "moroso", "pagado"];
+    if (!validos.includes(input.estado)) {
+      return { ok: false, error: "Estado inválido." };
+    }
+    const { error } = await supabase
+      .from("prestamos")
+      .update({ estado: input.estado, updated_at: new Date().toISOString() })
+      .eq("id", input.id);
+    if (error) return { ok: false, error: error.message };
+    revalidatePath("/");
+    revalidatePath("/prestamos");
+    revalidatePath("/mora");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REFINANCIAR CON NETEO — el cliente amplía su préstamo el MISMO día que paga
+// interés. En una sola operación:
+//   1) registra el interés como COBRADO (deja de figurar vencido/en mora),
+//   2) aumenta el capital del préstamo (interés mensual recalculado sobre el
+//      nuevo capital) y suma el adicional al capital pendiente,
+//   3) deja constancia del desembolso en Caja.
+// El depósito NETO que entregas = adicional − interés (ej: 500 − 200 = 300).
+// ----------------------------------------------------------------------------
+export async function refinanciarConNeteo(input: {
+  prestamoId: string;
+  montoAdicional: number;
+  montoInteres: number;
+  fecha: string; // YYYY-MM-DD
+}): Promise<ActionResult> {
+  try {
+    const supabase = await requireUser();
+    const adicional = Number(input.montoAdicional) || 0;
+    const interes = Number(input.montoInteres) || 0;
+    if (adicional <= 0) {
+      return { ok: false, error: "El monto adicional debe ser mayor a 0." };
+    }
+    if (interes < 0) {
+      return { ok: false, error: "El interés no puede ser negativo." };
+    }
+
+    const { data: prest, error: selErr } = await supabase
+      .from("prestamos")
+      .select("cliente_id, capital, capital_pendiente, tasa_interes, moneda, estado")
+      .eq("id", input.prestamoId)
+      .single();
+    if (selErr || !prest) {
+      return { ok: false, error: selErr?.message ?? "Préstamo no encontrado." };
+    }
+
+    // 1) Interés cobrado (si lo hay) → ingreso distribuible, limpia la mora.
+    if (interes > 0) {
+      const { error: pagoErr } = await supabase.from("pagos").insert({
+        prestamo_id: input.prestamoId,
+        cliente_id: prest.cliente_id,
+        fecha: input.fecha,
+        monto: interes,
+        moneda: prest.moneda,
+        tipo: "interes" as const,
+      });
+      if (pagoErr) return { ok: false, error: pagoErr.message };
+    }
+
+    // 2) Ampliar el préstamo. Interés mensual = capital nuevo * tasa%.
+    const nuevoCapital = Number((Number(prest.capital) + adicional).toFixed(2));
+    const nuevoPendiente = Number(
+      (Number(prest.capital_pendiente) + adicional).toFixed(2),
+    );
+    const tasa = Number(prest.tasa_interes) || 0;
+    const nuevoInteresMensual = Number((nuevoCapital * (tasa / 100)).toFixed(2));
+    const { error: updErr } = await supabase
+      .from("prestamos")
+      .update({
+        capital: nuevoCapital,
+        capital_pendiente: nuevoPendiente,
+        interes_mensual: nuevoInteresMensual,
+        // Al saldar el interés en el mismo acto, deja de estar en mora.
+        estado: prest.estado === "moroso" ? "activo" : prest.estado,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", input.prestamoId);
+    if (updErr) return { ok: false, error: updErr.message };
+
+    // 3) Movimiento de caja: desembolso adicional (salida). Deja el neto en la
+    //    descripción para trazabilidad.
+    const neto = Math.max(0, adicional - interes);
+    await supabase.from("movimientos_caja").insert({
+      fecha: input.fecha,
+      tipo: "prestamo_colocado",
+      monto: adicional,
+      prestamo_id: input.prestamoId,
+      descripcion: `Ampliación con neteo · depósito entregado ${neto}`,
+    });
+
+    revalidatePath("/");
+    revalidatePath("/prestamos");
+    revalidatePath("/mora");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado" };
+  }
+}
+
+// ----------------------------------------------------------------------------
 // ELIMINAR PRÉSTAMO — borra el préstamo y sus pagos (cascade en la FK).
 // ----------------------------------------------------------------------------
 export async function eliminarPrestamo(id: string): Promise<ActionResult> {

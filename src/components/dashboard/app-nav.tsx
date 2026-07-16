@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 const LINKS = [
   { href: "/", label: "Panel" },
   { href: "/prestamos", label: "Préstamos" },
+  { href: "/mora", label: "Mora" },
   { href: "/clientes", label: "Clientes" },
 ];
 

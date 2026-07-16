@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { editarPrestamo, eliminarPrestamo, eliminarPago } from "@/lib/actions";
+import { RefinanciarButton } from "@/components/prestamos/refinanciar-button";
 import { formatFechaCorta, formatPEN } from "@/lib/format";
 import type { Pago, Prestamo } from "@/lib/types";
 
@@ -26,10 +27,12 @@ export function PrestamoActions({
   prestamo,
   clienteNombre,
   pagos,
+  hoy,
 }: {
   prestamo: Prestamo;
   clienteNombre: string;
   pagos: Pago[];
+  hoy: string;
 }) {
   const [openAmort, setOpenAmort] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -41,6 +44,14 @@ export function PrestamoActions({
         <ListChecks className="h-4 w-4" />
         <span className="hidden md:inline">Amortizaciones</span>
       </Button>
+      {prestamo.estado !== "pagado" && (
+        <RefinanciarButton
+          prestamo={prestamo}
+          clienteNombre={clienteNombre}
+          hoy={hoy}
+          variant="row"
+        />
+      )}
       <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => setOpenEdit(true)} aria-label="Editar">
         <Pencil className="h-4 w-4" />
       </Button>
