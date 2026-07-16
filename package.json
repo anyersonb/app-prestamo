@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.11",
     "@radix-ui/react-progress": "^1.1.12",
